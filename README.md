@@ -28,7 +28,7 @@ The following code shows basic usage of this library:
 ```javascript
 import React, {useState} from 'react';
 import {View, Text} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker from 'react-native-dropdown-picker-plus';
 
 export default function App() {
     const [open, setOpen] = useState(false);

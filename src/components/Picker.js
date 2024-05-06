@@ -13,10 +13,12 @@ import {
   ActivityIndicator,
   BackHandler,
   Dimensions,
+  FlatList,
   Image,
   Modal,
   Platform,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -24,7 +26,6 @@ import {
   View,
 } from 'react-native';
 
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import {
   ASCII_CODE,
   BADGE_COLORS,
@@ -46,6 +47,8 @@ import THEMES from '../themes';
 import ListEmpty from './ListEmpty';
 import RenderBadgeItem from './RenderBadgeItem';
 import RenderListItem from './RenderListItem';
+import { Outline } from './Outline';
+import PickerLabel from './PickerLabel';
 
 const { height: WINDOW_HEIGHT } = Dimensions.get('window');
 
@@ -91,6 +94,7 @@ function Picker({
   disableLocalSearch = false,
   dropDownContainerStyle = {},
   dropDownDirection = DROPDOWN_DIRECTION.DEFAULT,
+  hasError = false,
   extendableBadgeContainer = false,
   flatListProps = {},
   hideSelectedItemIcon = false,
@@ -100,8 +104,10 @@ function Picker({
   itemProps = {},
   itemSeparator = false,
   itemSeparatorStyle = {},
+  label = '',
   labelProps = {},
   labelStyle = {},
+  labelY = 7.5,
   language = LANGUAGE.DEFAULT,
   listChildContainerStyle = {},
   listChildLabelStyle = {},
@@ -122,6 +128,7 @@ function Picker({
   modalProps = {},
   modalTitle,
   modalTitleStyle = {},
+  modalTitleContainerStyle = {},
   mode = MODE.DEFAULT,
   multiple = false,
   multipleText = null,
@@ -158,12 +165,14 @@ function Picker({
   testID,
   textStyle = {},
   theme = THEMES.DEFAULT,
+  Theme = {},
   TickIconComponent = null,
   tickIconContainerStyle = {},
   tickIconStyle = {},
   translation = {},
   zIndex = 5000,
   zIndexInverse = 6000,
+  customOutlineColor = undefined,
 }) {
   const [necessaryItems, setNecessaryItems] = useState([]);
   const [searchText, setSearchText] = useState('');
@@ -409,7 +418,7 @@ function Picker({
     });
 
     return sortedItems;
-  }, [items, ITEM_SCHEMA]);
+  }, [items, ITEM_SCHEMA.parent, ITEM_SCHEMA.value]);
 
   /**
    * Scroll to the first selected item.
@@ -451,7 +460,7 @@ function Picker({
         }
       }
     }, 200);
-  }, [sortedItems]);
+  }, [sortedItems, ITEM_SCHEMA.value]);
 
   /**
    * onScrollToIndexFailed.
@@ -483,7 +492,7 @@ function Picker({
       });
     }
     return stickyHeaderIndices;
-  }, [stickyHeader, sortedItems]);
+  }, [stickyHeader, sortedItems, ITEM_SCHEMA.parent, ITEM_SCHEMA.value]);
 
   /**
    * The items.
@@ -547,7 +556,16 @@ function Picker({
     }
 
     return results;
-  }, [sortedItems, ITEM_SCHEMA, searchText, addCustomItem]);
+  }, [
+    sortedItems,
+    searchText,
+    addCustomItem,
+    disableLocalSearch,
+    ITEM_SCHEMA.label,
+    searchWithRegionalAccents,
+    ITEM_SCHEMA.value,
+    ITEM_SCHEMA.parent,
+  ]);
 
   /**
    * The value.
@@ -571,7 +589,7 @@ function Picker({
     return necessaryItems.filter((item) =>
       _value.includes(item[ITEM_SCHEMA.value]),
     );
-  }, [necessaryItems, _value, ITEM_SCHEMA, multiple]);
+  }, [necessaryItems, _value, multiple, ITEM_SCHEMA.value]);
 
   /**
    * The language.
@@ -630,7 +648,7 @@ function Picker({
       return true;
 
     return necessaryItems.length === 0;
-  }, [necessaryItems, _value]);
+  }, [_value, necessaryItems.length]);
 
   /**
    * Get the selected item.
@@ -646,7 +664,7 @@ function Picker({
     } catch (e) {
       return null;
     }
-  }, [_value, necessaryItems, isNull, multiple]);
+  }, [_value, necessaryItems, isNull, multiple, ITEM_SCHEMA.value]);
 
   /**
    * Get the label of the selected item.
@@ -674,7 +692,7 @@ function Picker({
         return fallback;
       }
     },
-    [getSelectedItem, multiple, _multipleText, ITEM_SCHEMA],
+    [getSelectedItem, multiple, _multipleText, ITEM_SCHEMA.label],
   );
 
   /**
@@ -698,7 +716,7 @@ function Picker({
     } catch (e) {
       return null;
     }
-  }, [getSelectedItem, multiple, ITEM_SCHEMA]);
+  }, [getSelectedItem, multiple, ITEM_SCHEMA.icon]);
 
   /**
    * onPress.
@@ -723,13 +741,13 @@ function Picker({
     onPressToggle();
   }, [
     open,
-    onPressToggle,
     onPress,
     onDirectionChanged,
     maxHeight,
     pickerHeight,
     bottomOffset,
     dropDownDirection,
+    WINDOW_HEIGHT,
   ]);
 
   /**
@@ -792,10 +810,7 @@ function Picker({
    * The disabled style.
    * @returns {object}
    */
-  const _disabledStyle = useMemo(
-    () => disabled && disabledStyle,
-    [disabled, disabledStyle],
-  );
+  const _disabledStyle = useMemo(() => disabled && disabledStyle, [disabled]);
 
   /**
    * The zIndex.
@@ -807,7 +822,7 @@ function Picker({
     }
 
     return zIndex;
-  }, [zIndex, zIndexInverse, direction, open]);
+  }, [zIndex, direction, open]);
 
   /**
    * The style.
@@ -823,7 +838,7 @@ function Picker({
       ...[_disabledStyle].flat(),
       pickerNoBorderRadius,
     ],
-    [rtl, style, _disabledStyle, pickerNoBorderRadius, _zIndex, THEME],
+    [rtl, style, _disabledStyle, pickerNoBorderRadius, _zIndex, THEME.style],
   );
 
   /**
@@ -839,14 +854,9 @@ function Picker({
    * The style of the label.
    * @returns {object}
    */
-  const _labelStyle = useMemo(
-    () => [
-      THEME.label,
-      ...[textStyle].flat(),
-      ...[!isNull && labelStyle].flat(),
-      ...[_placeholderStyle].flat(),
-    ],
-    [textStyle, _placeholderStyle, labelStyle, isNull, THEME],
+  const _displayValueStyle = useMemo(
+    () => [THEME.label, ...[textStyle].flat(), ...[_placeholderStyle].flat()],
+    [textStyle, _placeholderStyle, THEME.label],
   );
 
   /**
@@ -855,7 +865,7 @@ function Picker({
    */
   const _arrowIconStyle = useMemo(
     () => [THEME.arrowIcon, ...[arrowIconStyle].flat()],
-    [arrowIconStyle, THEME],
+    [arrowIconStyle, THEME.arrowIcon],
   );
 
   /**
@@ -879,8 +889,8 @@ function Picker({
       dropDownNoBorderRadius,
       maxHeight,
       pickerHeight,
-      THEME,
       _zIndex,
+      THEME.dropDownContainer,
     ],
   );
 
@@ -890,7 +900,7 @@ function Picker({
    */
   const _modalContentContainerStyle = useMemo(
     () => [THEME.modalContentContainer, ...[modalContentContainerStyle].flat()],
-    [modalContentContainerStyle, THEME],
+    [modalContentContainerStyle, THEME.modalContentContainer],
   );
 
   /**
@@ -911,7 +921,7 @@ function Picker({
    */
   const _containerStyle = useMemo(
     () => [THEME.container, zIndexContainer, ...[containerStyle].flat()],
-    [zIndexContainer, containerStyle, THEME],
+    [zIndexContainer, containerStyle, THEME.container],
   );
 
   /**
@@ -923,7 +933,7 @@ function Picker({
       RTL_STYLE(rtl, THEME.arrowIconContainer),
       ...[arrowIconContainerStyle].flat(),
     ],
-    [rtl, arrowIconContainerStyle, THEME],
+    [rtl, arrowIconContainerStyle, THEME.arrowIconContainer],
   );
 
   /**
@@ -954,7 +964,8 @@ function Picker({
     ArrowDownIconComponent,
     _arrowIconStyle,
     _arrowIconContainerStyle,
-    ICON,
+    ICON.ARROW_UP,
+    ICON.ARROW_DOWN,
   ]);
 
   /**
@@ -963,7 +974,7 @@ function Picker({
    */
   const _iconContainerStyle = useMemo(
     () => [RTL_STYLE(rtl, THEME.iconContainer), ...[iconContainerStyle].flat()],
-    [rtl, iconContainerStyle, THEME],
+    [rtl, iconContainerStyle, THEME.iconContainer],
   );
 
   /**
@@ -992,12 +1003,17 @@ function Picker({
     () => (
       <>
         {SelectedItemIconComponent}
-        <Text style={_labelStyle} {...labelProps}>
+        <Text style={_displayValueStyle} {...labelProps}>
           {_selectedItemLabel}
         </Text>
       </>
     ),
-    [SelectedItemIconComponent, _labelStyle, labelProps, _selectedItemLabel],
+    [
+      SelectedItemIconComponent,
+      _displayValueStyle,
+      labelProps,
+      _selectedItemLabel,
+    ],
   );
 
   /**
@@ -1103,13 +1119,16 @@ function Picker({
       badgeTextStyle,
       getBadgeColor,
       getBadgeDotColor,
-      ITEM_SCHEMA,
       onPressBadge,
       rtl,
       showBadgeDot,
       textStyle,
       THEME,
       theme,
+      badgeProps,
+      ITEM_SCHEMA.label,
+      ITEM_SCHEMA.value,
+      ITEM_SCHEMA.icon,
     ],
   );
 
@@ -1121,7 +1140,7 @@ function Picker({
     if (itemKey === null) return ITEM_SCHEMA.value;
 
     return itemKey;
-  }, [itemKey, ITEM_SCHEMA]);
+  }, [itemKey, ITEM_SCHEMA.value]);
 
   /**
    * The key extractor.
@@ -1135,7 +1154,7 @@ function Picker({
    */
   const _badgeSeparatorStyle = useMemo(
     () => [THEME.badgeSeparator, ...[badgeSeparatorStyle].flat()],
-    [badgeSeparatorStyle, THEME],
+    [badgeSeparatorStyle, THEME.badgeSeparator],
   );
 
   /**
@@ -1158,7 +1177,7 @@ function Picker({
         transform: [{ scaleX: -1 }],
       },
     ],
-    [rtl, THEME],
+    [rtl, THEME.labelContainer],
   );
 
   /**
@@ -1168,12 +1187,12 @@ function Picker({
   const BadgeListEmptyComponent = useCallback(
     () => (
       <View style={labelContainerStyle}>
-        <Text style={_labelStyle} {...labelProps}>
+        <Text style={_displayValueStyle} {...labelProps}>
           {_placeholder}
         </Text>
       </View>
     ),
-    [_labelStyle, labelContainerStyle, labelProps, _placeholder],
+    [_displayValueStyle, labelContainerStyle, labelProps, _placeholder],
   );
 
   /**
@@ -1189,7 +1208,7 @@ function Picker({
    */
   const extendableBadgeContainerStyle = useMemo(
     () => [RTL_DIRECTION(rtl, THEME.extendableBadgeContainer)],
-    [rtl, THEME],
+    [rtl, THEME.extendableBadgeContainer],
   );
 
   /**
@@ -1204,7 +1223,7 @@ function Picker({
         marginStart: THEME.extendableBadgeItemContainer.marginEnd,
       },
     ],
-    [rtl, THEME],
+    [rtl, THEME.extendableBadgeItemContainer],
   );
 
   /**
@@ -1227,11 +1246,7 @@ function Picker({
 
       return <BadgeListEmptyComponent />;
     },
-    [
-      __renderBadge,
-      extendableBadgeContainerStyle,
-      extendableBadgeItemContainerStyle,
-    ],
+    [extendableBadgeContainerStyle, extendableBadgeItemContainerStyle],
   );
 
   /**
@@ -1261,13 +1276,13 @@ function Picker({
   }, [
     rtl,
     extendableBadgeContainer,
-    ExtendableBadgeContainer,
     selectedItems,
     __renderBadge,
     keyExtractor,
     BadgeSeparatorComponent,
     BadgeListEmptyComponent,
-    THEME,
+    setBadgeFlatListRef,
+    THEME.listBody,
   ]);
 
   /**
@@ -1293,7 +1308,13 @@ function Picker({
       ...[listItemContainerStyle].flat(),
       stickyHeader && { backgroundColor: THEME.style.backgroundColor },
     ],
-    [rtl, listItemContainerStyle, THEME],
+    [
+      rtl,
+      listItemContainerStyle,
+      THEME.listItemContainer,
+      stickyHeader,
+      THEME.style.backgroundColor,
+    ],
   );
 
   /**
@@ -1305,7 +1326,7 @@ function Picker({
       RTL_STYLE(rtl, THEME.tickIconContainer),
       ...[tickIconContainerStyle].flat(),
     ],
-    [rtl, tickIconContainerStyle, THEME],
+    [rtl, tickIconContainerStyle, THEME.tickIconContainer],
   );
 
   /**
@@ -1318,7 +1339,7 @@ function Picker({
       ...[textStyle].flat(),
       ...[listItemLabelStyle].flat(),
     ],
-    [textStyle, listItemLabelStyle, THEME],
+    [textStyle, listItemLabelStyle, THEME.listItemLabel],
   );
 
   /**
@@ -1327,7 +1348,7 @@ function Picker({
    */
   const _tickIconStyle = useMemo(
     () => [THEME.tickIcon, ...[tickIconStyle].flat()],
-    [tickIconStyle, THEME],
+    [tickIconStyle, THEME.tickIcon],
   );
 
   /**
@@ -1344,7 +1365,14 @@ function Picker({
           flexDirection: 'row-reverse',
         },
     ],
-    [rtl, listMode, searchable, modalTitle, searchContainerStyle, THEME],
+    [
+      rtl,
+      listMode,
+      searchable,
+      modalTitle,
+      searchContainerStyle,
+      THEME.searchContainer,
+    ],
   );
 
   /**
@@ -1353,7 +1381,7 @@ function Picker({
    */
   const _searchTextInputStyle = useMemo(
     () => [textStyle, THEME.searchTextInput, ...[searchTextInputStyle].flat()],
-    [textStyle, searchTextInputStyle, THEME],
+    [textStyle, searchTextInputStyle, THEME.searchTextInput],
   );
 
   /**
@@ -1365,7 +1393,7 @@ function Picker({
       RTL_STYLE(rtl, THEME.closeIconContainer),
       ...[closeIconContainerStyle].flat(),
     ],
-    [rtl, closeIconContainerStyle, THEME],
+    [rtl, closeIconContainerStyle, THEME.closeIconContainer],
   );
 
   /**
@@ -1374,7 +1402,7 @@ function Picker({
    */
   const _closeIconStyle = useMemo(
     () => [THEME.closeIcon, ...[closeIconStyle].flat()],
-    [closeIconStyle, THEME],
+    [closeIconStyle, THEME.closeIcon],
   );
 
   /**
@@ -1383,20 +1411,21 @@ function Picker({
    */
   const _listMessageContainerStyle = useMemo(
     () => [THEME.listMessageContainer, ...[listMessageContainerStyle].flat()],
-    [listMessageContainerStyle, THEME],
+    [listMessageContainerStyle, THEME.listMessageContainer],
   );
 
   /**
    * The list message text style.
    * @returns {object}
    */
-  const _listMessageTextStyle = useMemo(
+  let _listMessageTextStyle;
+  _listMessageTextStyle = useMemo(
     () => [
       THEME.listMessageText,
       ...[textStyle].flat(),
       ...[listMessageTextStyle].flat(),
     ],
-    [listMessageTextStyle, THEME],
+    [listMessageTextStyle, THEME.listMessageText, textStyle],
   );
 
   /**
@@ -1483,7 +1512,6 @@ function Picker({
     },
     [
       closeAfterSelecting,
-      ITEM_SCHEMA,
       max,
       min,
       multiple,
@@ -1491,6 +1519,7 @@ function Picker({
       onSelectItem,
       setItems,
       setValue,
+      ITEM_SCHEMA.value,
     ],
   );
 
@@ -1512,7 +1541,7 @@ function Picker({
     _tickIconStyle,
     _tickIconContainerStyle,
     showTickIcon,
-    ICON,
+    ICON.TICK,
   ]);
 
   /**
@@ -1530,7 +1559,7 @@ function Picker({
    */
   const _selectedItemContainerStyle = useMemo(
     () => [THEME.selectedItemContainer, selectedItemContainerStyle],
-    [THEME, selectedItemContainerStyle],
+    [selectedItemContainerStyle, THEME.selectedItemContainer],
   );
 
   /**
@@ -1539,7 +1568,7 @@ function Picker({
    */
   const _selectedItemLabelStyle = useMemo(
     () => [THEME.selectedItemLabel, selectedItemLabelStyle],
-    [THEME, selectedItemLabelStyle],
+    [selectedItemLabelStyle, THEME.selectedItemLabel],
   );
 
   /**
@@ -1548,7 +1577,7 @@ function Picker({
    */
   const _disabledItemContainerStyle = useMemo(
     () => [THEME.disabledItemContainer, disabledItemContainerStyle],
-    [THEME, disabledItemContainerStyle],
+    [disabledItemContainerStyle, THEME.disabledItemContainer],
   );
 
   /**
@@ -1557,7 +1586,20 @@ function Picker({
    */
   const _disabledItemLabelStyle = useMemo(
     () => [THEME.disabledItemContainer, disabledItemLabelStyle],
-    [THEME, disabledItemLabelStyle],
+    [disabledItemLabelStyle, THEME.disabledItemContainer],
+  );
+
+  /**
+   * Set item position.
+   * @param {string|number|boolean} value
+   * @param {number} y
+   */
+  const setItemPosition = useCallback(
+    (value, y) => {
+      if (autoScroll && listMode === LIST_MODE.SCROLLVIEW)
+        itemPositionsRef.current[value] = y;
+    },
+    [autoScroll, listMode],
   );
 
   /**
@@ -1626,14 +1668,12 @@ function Picker({
       customItemLabelStyle,
       itemLabelProps,
       itemProps,
-      ITEM_SCHEMA,
       listChildContainerStyle,
       listChildLabelStyle,
       listParentContainerStyle,
       listParentLabelStyle,
       multiple,
       onPressItem,
-      RenderItemComponent,
       rtl,
       theme,
       THEME,
@@ -1646,18 +1686,16 @@ function Picker({
       _selectedItemLabelStyle,
       _TickIconComponent,
       _value,
+      ITEM_SCHEMA.icon,
+      ITEM_SCHEMA.value,
+      ITEM_SCHEMA.label,
+      ITEM_SCHEMA.parent,
+      ITEM_SCHEMA.selectable,
+      ITEM_SCHEMA.disabled,
+      ITEM_SCHEMA.containerStyle,
+      setItemPosition,
     ],
   );
-
-  /**
-   * Set item position.
-   * @param {string|number|boolean} value
-   * @param {number} y
-   */
-  const setItemPosition = useCallback((value, y) => {
-    if (autoScroll && listMode === LIST_MODE.SCROLLVIEW)
-      itemPositionsRef.current[value] = y;
-  }, []);
 
   /**
    * The item separator.
@@ -1669,7 +1707,7 @@ function Picker({
     return (
       <View style={[THEME.itemSeparator, ...[itemSeparatorStyle].flat()]} />
     );
-  }, [itemSeparator, itemSeparatorStyle, THEME]);
+  }, [itemSeparator, THEME.itemSeparator]);
 
   /**
    * The search placeholder.
@@ -1717,7 +1755,7 @@ function Picker({
     _closeIconStyle,
     _closeIconContainerStyle,
     onPressClose,
-    ICON,
+    ICON.CLOSE,
   ]);
 
   /**
@@ -1740,7 +1778,7 @@ function Picker({
       ...[modalTitleStyle].flat(),
       ...[textStyle].flat(),
     ],
-    [textStyle, modalTitleStyle, THEME],
+    [textStyle, modalTitleStyle, THEME.modalTitle],
   );
 
   /**
@@ -1751,23 +1789,33 @@ function Picker({
     () =>
       isSearchComponentVisible && (
         <View style={_searchContainerStyle}>
-          {searchable ? (
-            <TextInput
-              value={searchText}
-              onChangeText={_onChangeSearchText}
-              style={_searchTextInputStyle}
-              placeholder={_searchPlaceholder}
-              placeholderTextColor={searchPlaceholderTextColor}
-              {...searchTextInputProps}
-            />
-          ) : (
-            listMode === LIST_MODE.MODAL && (
-              <View style={styles.flex}>
-                <Text style={_modalTitleStyle}>{modalTitle}</Text>
-              </View>
-            )
-          )}
-          {_CloseIconComponent}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              flex: 1,
+            }}>
+            <View style={{ flexDirection: 'column', width: '80%' }}>
+              {listMode === LIST_MODE.MODAL && (
+                <View
+                  style={{ paddingBottom: searchable ? '5%' : 0, ...modalTitleContainerStyle }}>
+                  <Text style={_modalTitleStyle}>{modalTitle}</Text>
+                </View>
+              )}
+
+              {searchable && (
+                <TextInput
+                  value={searchText}
+                  onChangeText={_onChangeSearchText}
+                  style={_searchTextInputStyle}
+                  placeholder={_searchPlaceholder}
+                  placeholderTextColor={searchPlaceholderTextColor}
+                  {...searchTextInputProps}
+                />
+              )}
+            </View>
+            {_CloseIconComponent}
+          </View>
         </View>
       ),
     [
@@ -1777,12 +1825,12 @@ function Picker({
       searchable,
       searchPlaceholderTextColor,
       searchText,
-      searchTextInputProps,
       _modalTitleStyle,
       _onChangeSearchText,
       _searchContainerStyle,
       _searchPlaceholder,
       _searchTextInputStyle,
+      _CloseIconComponent,
     ],
   );
 
@@ -1840,21 +1888,14 @@ function Picker({
         message={message}
       />
     );
-  }, [
-    _,
-    _listMessageContainerStyle,
-    _listMessageTextStyle,
-    ListEmptyComponent,
-    _ActivityIndicatorComponent,
-    loading,
-  ]);
+  }, [_, ListEmptyComponent, loading]);
 
   /**
    * onRequestCloseModal.
    */
   const onRequestCloseModal = useCallback(() => {
     setOpen(false);
-  }, []);
+  }, [setOpen]);
 
   /**
    * The dropdown flatlist component.
@@ -1864,7 +1905,13 @@ function Picker({
     () => (
       <FlatList
         ref={flatListRef}
-        style={styles.flex}
+        style={[
+          styles.flex,
+          {
+            backgroundColor: 'white',
+            borderRadius: _dropDownContainerStyle.flat()[0].borderRadius,
+          },
+        ]}
         contentContainerStyle={THEME.flatListContentContainer}
         ListEmptyComponent={_ListEmptyComponent}
         data={_items}
@@ -1881,11 +1928,14 @@ function Picker({
       flatListProps,
       ItemSeparatorComponent,
       keyExtractor,
-      THEME,
       _items,
       _ListEmptyComponent,
       _value,
       __renderListItem,
+      _dropDownContainerStyle,
+      THEME.flatListContentContainer,
+      stickyHeaderIndices,
+      onScrollToIndexFailed,
     ],
   );
 
@@ -1909,7 +1959,15 @@ function Picker({
         {_items.length === 0 && _ListEmptyComponent()}
       </ScrollView>
     ),
-    [__renderListItem, _itemKey, scrollViewProps, _ListEmptyComponent],
+    [
+      __renderListItem,
+      _itemKey,
+      scrollViewProps,
+      _ListEmptyComponent,
+      stickyHeaderIndices,
+      _items,
+      ItemSeparatorComponent,
+    ],
   );
 
   /**
@@ -1930,7 +1988,15 @@ function Picker({
         </SafeAreaView>
       </Modal>
     ),
-    [open, SearchComponent, _modalContentContainerStyle, modalProps],
+    [
+      open,
+      SearchComponent,
+      _modalContentContainerStyle,
+      modalProps,
+      modalAnimationType,
+      onRequestCloseModal,
+      DropDownFlatListComponent,
+    ],
   );
 
   /**
@@ -1977,10 +2043,34 @@ function Picker({
    */
   const pointerEvents = useMemo(() => (disabled ? 'none' : 'auto'), [disabled]);
 
+  // Outline & Label
+  const { colors, roundness } = Theme;
+  const { backgroundColor: _bgC, ...touchOpacityStyle } = THEME.style;
+  const _innerStyle = [touchOpacityStyle, _style[1], _style[2]];
+
   return (
     <View style={_containerStyle} {...containerProps}>
-      <TouchableOpacity
+      <Outline
         style={_style}
+        roundness={_dropDownContainerStyle.flat()[0].borderRadius || roundness}
+        hasActiveOutline={hasError}
+        activeColor={hasError ? Theme?.colors.error : Theme?.colors.primary}
+        outlineColor={customOutlineColor || 'black'}
+        backgroundColor={
+          style.backgroundColor
+            ? style.backgroundColor
+            : colors.backgroundColor || 'white'
+        }
+      />
+      {label && (
+        <PickerLabel
+          label={label}
+          labelStyle={labelStyle}
+          transformY={labelY}
+        />
+      )}
+      <TouchableOpacity
+        style={_innerStyle}
         onPress={__onPress}
         onLayout={__onLayout}
         {...props}
@@ -1991,7 +2081,6 @@ function Picker({
         {_BodyComponent}
         {_ArrowComponent}
       </TouchableOpacity>
-
       {DropDownBodyComponent}
     </View>
   );

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+import { responsiveFontSize } from 'react-native-responsive-dimensions';
 import Colors from '../../constants/colors';
 
 export const ICONS = {
@@ -81,6 +82,7 @@ export default StyleSheet.create({
   label: {
     color: Colors.HEATHER,
     flex: 1,
+    fontSize: responsiveFontSize(1.8),
   },
   labelContainer: {
     flex: 1,
@@ -125,7 +127,7 @@ export default StyleSheet.create({
   },
   modalTitle: {
     color: Colors.HEATHER,
-    fontSize: 18,
+    fontSize: responsiveFontSize(2.25),
   },
   searchContainer: {
     alignItems: 'center',

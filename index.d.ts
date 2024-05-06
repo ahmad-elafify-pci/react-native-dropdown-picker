@@ -1,4 +1,4 @@
-declare module 'react-native-dropdown-picker' {
+declare module 'react-native-dropdown-picker-plus' {
   import {
     Dispatch,
     JSX,
@@ -212,8 +212,10 @@ declare module 'react-native-dropdown-picker' {
     itemProps?: TouchableOpacityProps;
     itemSeparator?: boolean;
     itemSeparatorStyle?: StyleProp<ViewStyle>;
+    label?: string;
     labelProps?: TextProps;
     labelStyle?: StyleProp<TextStyle>;
+    labelY?: number;
     language?: LanguageType;
     listChildContainerStyle?: StyleProp<ViewStyle>;
     listChildLabelStyle?: StyleProp<TextStyle>;
@@ -236,6 +238,7 @@ declare module 'react-native-dropdown-picker' {
     modalProps?: ModalProps;
     modalTitle?: string;
     modalTitleStyle?: StyleProp<TextStyle>;
+    modalTitleContainerStyle?: StyleProp<ViewStyle>;
     mode?: ModeType;
     multipleText?: string;
     onChangeSearchText?: (text: string) => void;
@@ -269,6 +272,7 @@ declare module 'react-native-dropdown-picker' {
     testID?: string;
     textStyle?: StyleProp<TextStyle>;
     theme?: ThemeNameType;
+    Theme: any;
     TickIconComponent?: (props: { style: StyleProp<ViewStyle> }) => JSX.Element;
     tickIconContainerStyle?: StyleProp<ViewStyle>;
     tickIconStyle?: StyleProp<ViewStyle>;

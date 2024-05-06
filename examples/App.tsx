@@ -1,10 +1,11 @@
 import React, { JSX } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import DropDownPicker, { ItemType } from 'react-native-dropdown-picker';
+import { ItemType } from 'react-native-dropdown-picker';
 import JavascriptClassExample from './example-src-files/javascript-class-example';
 import JavascriptFunctionExample from './example-src-files/javascript-function-example';
 import TypescriptClassExample from './example-src-files/typescript-class-example';
 import TypescriptFunctionExample from './example-src-files/typescript-function-example';
+import Picker from './src/components/Picker';
 
 enum ExampleComponent {
   JavaScriptClassSingleValue,
@@ -117,7 +118,7 @@ export default class App extends React.Component<Props, State> {
   }
 
   setCurrentExample(
-    callback: (prevState: ExampleComponent | null) => ExampleComponent | null,
+    callback: (prevState: ExampleComponent | null) => ExampleComponent,
   ): void {
     this.setState((state: Readonly<State>) => ({
       currentExample: callback(state.currentExample),
@@ -137,12 +138,18 @@ export default class App extends React.Component<Props, State> {
           </View>
 
           <View style={{ flex: 1 }}>
-            <DropDownPicker
+            <Picker
+              testID={'hello'}
+              modalTitle={'test'}
+              label={'Test'}
+              listMode={'MODAL'}
+              searchable={true}
               setValue={this.setCurrentExample}
-              value={currentExample}
+              value={currentExample as any}
               items={exampleComponents}
               open={examplePickerOpen}
-              setOpen={this.setOpen}
+              setOpen={this.setOpen as any}
+              Theme={{ colors: { primary: 'green' } }}
             />
           </View>
         </View>

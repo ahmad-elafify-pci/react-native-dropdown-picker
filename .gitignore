@@ -4,3 +4,4 @@ node_modules
 # see here: https://stackoverflow.com/questions/44206782/do-i-commit-the-package-lock-json-file-created-by-npm-5
 .vscode/*
 .idea
+examples/src

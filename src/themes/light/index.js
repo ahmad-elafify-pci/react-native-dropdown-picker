@@ -1,4 +1,8 @@
 import { StyleSheet } from 'react-native';
+import {
+  responsiveFontSize,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
 
 import Colors from '../../constants/colors';
 
@@ -11,36 +15,36 @@ export const ICONS = {
 
 export default StyleSheet.create({
   arrowIcon: {
-    height: 20,
-    width: 20,
+    height: responsiveWidth(5),
+    width: responsiveWidth(5),
   },
   arrowIconContainer: {
-    marginLeft: 10,
+    marginLeft: responsiveWidth(2.5),
   },
   badgeDotStyle: {
     backgroundColor: Colors.GREY,
-    borderRadius: 10 / 2,
-    height: 10,
+    borderRadius: responsiveWidth(1.75),
+    height: responsiveWidth(2.5),
     marginRight: 8,
-    width: 10,
+    width: responsiveWidth(2.5),
   },
   badgeSeparator: {
-    width: 5,
+    width: responsiveWidth(1.25),
   },
   badgeStyle: {
     alignItems: 'center',
     backgroundColor: Colors.ALTO,
-    borderRadius: 10,
+    borderRadius: responsiveWidth(2.5),
     flexDirection: 'row',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: responsiveWidth(2.5),
+    paddingVertical: responsiveWidth(1.25),
   },
   closeIcon: {
-    height: 30,
-    width: 30,
+    height: responsiveWidth(7.5),
+    width: responsiveWidth(7.5),
   },
   closeIconContainer: {
-    marginLeft: 10,
+    marginHorizontal: responsiveWidth(2.5),
   },
   container: {
     width: '100%',
@@ -52,8 +56,8 @@ export default StyleSheet.create({
   dropDownContainer: {
     backgroundColor: Colors.WHITE,
     borderColor: Colors.BLACK,
-    borderRadius: 8,
-    borderWidth: 1,
+    borderRadius: responsiveWidth(2),
+    borderWidth: responsiveWidth(0.25),
     overflow: 'hidden',
     position: 'absolute',
     width: '100%',
@@ -65,22 +69,23 @@ export default StyleSheet.create({
     flex: 1,
   },
   extendableBadgeItemContainer: {
-    marginEnd: 7,
-    marginVertical: 3,
+    marginEnd: responsiveWidth(1.75),
+    marginVertical: responsiveWidth(0.75),
   },
   flatListContentContainer: {
     flexGrow: 1,
   },
   iconContainer: {
-    marginRight: 10,
+    marginRight: responsiveWidth(2.5),
   },
   itemSeparator: {
     backgroundColor: Colors.BLACK,
-    height: 1,
+    height: responsiveWidth(0.25),
   },
   label: {
     color: Colors.BLACK,
     flex: 1,
+    fontSize: responsiveFontSize(1.8),
   },
   labelContainer: {
     flex: 1,
@@ -94,15 +99,15 @@ export default StyleSheet.create({
     flexGrow: 1,
   },
   listChildContainer: {
-    paddingLeft: 40,
+    paddingLeft: responsiveWidth(10),
   },
   listChildLabel: {},
   listItemContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    height: 40,
+    height: responsiveWidth(10),
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    paddingHorizontal: responsiveWidth(2.5),
   },
   listItemLabel: {
     color: Colors.BLACK,
@@ -112,7 +117,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    padding: 10,
+    padding: responsiveWidth(2.5),
   },
   listMessageText: {},
   listParentContainer: {},
@@ -122,46 +127,43 @@ export default StyleSheet.create({
   },
   modalTitle: {
     color: Colors.BLACK,
-    fontSize: 18,
+    fontSize: responsiveFontSize(2.25),
   },
   searchContainer: {
     alignItems: 'center',
     borderBottomColor: Colors.BLACK,
-    borderBottomWidth: 1,
+    borderBottomWidth: responsiveWidth(0.25),
     flexDirection: 'row',
-    padding: 10,
+    padding: responsiveWidth(2.5),
   },
   searchTextInput: {
     borderColor: Colors.BLACK,
     borderRadius: 8,
-    borderWidth: 1,
+    borderWidth: responsiveWidth(0.25),
     color: Colors.BLACK,
     flexGrow: 1,
     flexShrink: 1,
     margin: 0,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: responsiveWidth(2.5),
+    paddingVertical: responsiveWidth(1.25),
   },
   selectedItemContainer: {},
   selectedItemLabel: {},
   style: {
     alignItems: 'center',
     backgroundColor: Colors.WHITE,
-    borderColor: Colors.BLACK,
-    borderRadius: 8,
-    borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    minHeight: 50,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
+    minHeight: responsiveWidth(12.725),
+    paddingHorizontal: responsiveWidth(2.5),
+    paddingVertical: responsiveWidth(0.75),
     width: '100%',
   },
   tickIcon: {
-    height: 20,
-    width: 20,
+    height: responsiveWidth(5),
+    width: responsiveWidth(5), // 20
   },
   tickIconContainer: {
-    marginLeft: 10,
+    marginLeft: responsiveWidth(2.5),
   },
 });
