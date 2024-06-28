@@ -17,10 +17,18 @@ const PickerLabel = ({ label, onLayout, labelStyle, transformY = 0 }) => {
     height: textLayout.height,
   };
 
+  // Radius must be in range (0 < r <= 25) RSIllegalArgumentException: android.renderscript.ScriptIntrinsicBlur
+  const blurRadius = (x) => Math.max(0, Math.min(x, 25))
+  const blurIntensities = {
+    'android': blurRadius(textLayout.width),
+    'ios': blurRadius(textLayout.width / 2),
+    'web': blurRadius(textLayout.width / 2)
+  }
+
   return (
       <View style={[styles.container, { transform: [{ translateY: transformY * -1 }] }]} onLayout={onLayout}>
         <BlurView
-            intensity={textLayout.width / (Platform.OS === 'android' ? 1 : 2)}
+            intensity={blurIntensities[Platform.OS]}
             tint='light'
             style={[bgStyle, styles.blurView]}
             experimentalBlurMethod='dimezisBlurView'
