@@ -153,6 +153,7 @@ export default class App extends React.Component<Props, State> {
               mode={'SIMPLE'}
               hideListItemsIcons={true}
               labelBlurBackground={true}
+              leftComponent={<View style={{height: 24, width: 24, backgroundColor: 'red'}} /> as any}
             />
           </View>
         </View>

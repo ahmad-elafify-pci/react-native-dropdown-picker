@@ -112,6 +112,7 @@ function Picker({
   labelStyle = {},
   labelY = 0,
   language = LANGUAGE.DEFAULT,
+  leftComponent = undefined,
   listChildContainerStyle = {},
   listChildLabelStyle = {},
   ListEmptyComponent = null,
@@ -1005,13 +1006,14 @@ function Picker({
   const SimpleBodyComponent = useMemo(
     () => (
       <>
-        {SelectedItemIconComponent}
+        {leftComponent || SelectedItemIconComponent}
         <Text style={_displayValueStyle} {...labelProps}>
           {_selectedItemLabel}
         </Text>
       </>
     ),
     [
+      leftComponent,
       SelectedItemIconComponent,
       _displayValueStyle,
       labelProps,
