@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View, Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
+import {responsiveFontSize, responsiveHeight, responsiveWidth} from 'react-native-responsive-dimensions';
 
 const PickerLabel = ({ label, onLayout, labelStyle, transformY = 0, blurBackground = false }) => {
   const [textLayout, setTextLayout] = useState({ width: 0, height: 0 });
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     zIndex: 99999,
+    top: responsiveHeight(0.1)
   },
   background: {
     marginLeft: responsiveWidth(1.5),
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: '#000',
-    fontSize: responsiveFontSize(1.75),
+    fontSize: responsiveFontSize(1.5),
     textAlign: 'center',
   },
 });

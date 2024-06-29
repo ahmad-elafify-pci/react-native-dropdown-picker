@@ -25,6 +25,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {responsiveHeight} from "react-native-responsive-dimensions";
 
 import {
   ASCII_CODE,
@@ -109,7 +110,7 @@ function Picker({
   labelBlurBackground = false,
   labelProps = {},
   labelStyle = {},
-  labelY = 7.5,
+  labelY = 0,
   language = LANGUAGE.DEFAULT,
   listChildContainerStyle = {},
   listChildLabelStyle = {},
@@ -2049,7 +2050,7 @@ function Picker({
   // Outline & Label
   const { colors, roundness } = Theme;
   const { backgroundColor: _bgC, ...touchOpacityStyle } = THEME.style;
-  const _innerStyle = [touchOpacityStyle, _style[1], _style[2]];
+  const _innerStyle = [touchOpacityStyle, _style[1], _style[2], label ? {paddingTop: responsiveHeight(1)} : {}];
 
   return (
     <View style={_containerStyle} {...containerProps}>
