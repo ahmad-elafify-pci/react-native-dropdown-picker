@@ -150,6 +150,9 @@ export default class App extends React.Component<Props, State> {
               open={examplePickerOpen}
               setOpen={this.setOpen as any}
               Theme={{ colors: { primary: 'green' } }}
+              mode={'SIMPLE'}
+              hideListItemsIcons={true}
+              labelBlurBackground={true}
             />
           </View>
         </View>

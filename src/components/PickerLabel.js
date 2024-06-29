@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, Platform } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
 
-const PickerLabel = ({ label, onLayout, labelStyle, transformY = 0 }) => {
+const PickerLabel = ({ label, onLayout, labelStyle, transformY = 0, blurBackground = false }) => {
   const [textLayout, setTextLayout] = useState({ width: 0, height: 0 });
 
   const handleTextLayout = (event) => {
@@ -27,12 +27,12 @@ const PickerLabel = ({ label, onLayout, labelStyle, transformY = 0 }) => {
 
   return (
       <View style={[styles.container, { transform: [{ translateY: transformY * -1 }] }]} onLayout={onLayout}>
-        <BlurView
+        {blurBackground && <BlurView
             intensity={blurIntensities[Platform.OS]}
             tint='light'
             style={[bgStyle, styles.blurView]}
             experimentalBlurMethod='dimezisBlurView'
-        />
+        />}
         <Text onLayout={handleTextLayout} style={[styles.background, styles.label, labelStyle]}>
           {label}
         </Text>

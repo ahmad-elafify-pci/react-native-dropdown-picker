@@ -98,6 +98,7 @@ function Picker({
   extendableBadgeContainer = false,
   flatListProps = {},
   hideSelectedItemIcon = false,
+  hideListItemsIcons = false,
   iconContainerStyle = {},
   itemKey = null,
   itemLabelProps = {},
@@ -105,6 +106,7 @@ function Picker({
   itemSeparator = false,
   itemSeparatorStyle = {},
   label = '',
+  labelBlurBackground = false,
   labelProps = {},
   labelStyle = {},
   labelY = 7.5,
@@ -1608,7 +1610,8 @@ function Picker({
    */
   const __renderListItem = useCallback(
     ({ item }) => {
-      let IconComponent = item[ITEM_SCHEMA.icon] ?? null;
+
+      let IconComponent = hideListItemsIcons ? null : item[ITEM_SCHEMA.icon] ?? null;
 
       if (IconComponent) {
         IconComponent = (
@@ -2067,6 +2070,7 @@ function Picker({
           label={label}
           labelStyle={labelStyle}
           transformY={labelY}
+          blurBackground={labelBlurBackground}
         />
       )}
       <TouchableOpacity

@@ -206,6 +206,7 @@ declare module 'react-native-dropdown-picker-plus' {
     dropDownDirection?: DropDownDirectionType;
     extendableBadgeContainer?: boolean;
     flatListProps?: Partial<FlatListProps<ItemType<T>>>;
+    hideListItemsIcons?: boolean;
     hideSelectedItemIcon?: boolean;
     iconContainerStyle?: StyleProp<ViewStyle>;
     itemKey?: string;
@@ -213,6 +214,7 @@ declare module 'react-native-dropdown-picker-plus' {
     itemSeparator?: boolean;
     itemSeparatorStyle?: StyleProp<ViewStyle>;
     label?: string;
+    labelBlurBackground?: boolean;
     labelProps?: TextProps;
     labelStyle?: StyleProp<TextStyle>;
     labelY?: number;
