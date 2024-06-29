@@ -225,6 +225,7 @@ declare module 'react-native-dropdown-picker-plus' {
       props: ListEmptyComponentPropsInterface,
     ) => JSX.Element;
     leftComponent?: JSX.Element;
+    leftComponentIndentLabel?: boolean;
     listItemContainerStyle?: StyleProp<ViewStyle>;
     listItemLabelStyle?: StyleProp<TextStyle>;
     listMessageContainerStyle?: StyleProp<ViewStyle>;

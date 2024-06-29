@@ -113,6 +113,7 @@ function Picker({
   labelY = 0,
   language = LANGUAGE.DEFAULT,
   leftComponent = undefined,
+  leftComponentIndentLabel = false,
   listChildContainerStyle = {},
   listChildLabelStyle = {},
   ListEmptyComponent = null,
@@ -707,6 +708,8 @@ function Picker({
     [getLabel, _placeholder],
   );
 
+  const [labelIndentWidth, setLabelIndentWidth] = useState(0)
+
   /**
    * The icon of the selected item.
    */
@@ -1006,7 +1009,12 @@ function Picker({
   const SimpleBodyComponent = useMemo(
     () => (
       <>
-        {leftComponent || SelectedItemIconComponent}
+        <View onLayout={(event) => {
+          const { width } = event.nativeEvent.layout;
+          if (leftComponentIndentLabel) setLabelIndentWidth(width)
+        }}>
+          {leftComponent || SelectedItemIconComponent}
+        </View>
         <Text style={_displayValueStyle} {...labelProps}>
           {_selectedItemLabel}
         </Text>
@@ -2072,6 +2080,7 @@ function Picker({
         <PickerLabel
           label={label}
           labelStyle={labelStyle}
+          indentWidth={labelIndentWidth}
           transformY={labelY}
           blurBackground={labelBlurBackground}
         />
