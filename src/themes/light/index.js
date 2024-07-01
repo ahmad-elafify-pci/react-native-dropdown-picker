@@ -112,6 +112,7 @@ export default StyleSheet.create({
   listItemLabel: {
     color: Colors.BLACK,
     flex: 1,
+    fontSize: responsiveFontSize(1.75),
   },
   listMessageContainer: {
     alignItems: 'center',
