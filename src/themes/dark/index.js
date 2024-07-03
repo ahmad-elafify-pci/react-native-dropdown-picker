@@ -147,6 +147,7 @@ export default StyleSheet.create({
     margin: 0,
     paddingHorizontal: 10,
     paddingVertical: 5,
+    fontSize: responsiveFontSize(1.75),
   },
   selectedItemContainer: {},
   selectedItemLabel: {},
