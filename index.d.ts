@@ -214,7 +214,6 @@ declare module 'react-native-dropdown-picker-plus' {
     itemSeparator?: boolean;
     itemSeparatorStyle?: StyleProp<ViewStyle>;
     label?: string;
-    labelBlurBackground?: boolean;
     labelProps?: TextProps;
     labelStyle?: StyleProp<TextStyle>;
     labelY?: number;
@@ -276,7 +275,6 @@ declare module 'react-native-dropdown-picker-plus' {
     testID?: string;
     textStyle?: StyleProp<TextStyle>;
     theme?: ThemeNameType;
-    Theme: any;
     TickIconComponent?: (props: { style: StyleProp<ViewStyle> }) => JSX.Element;
     tickIconContainerStyle?: StyleProp<ViewStyle>;
     tickIconStyle?: StyleProp<ViewStyle>;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
+import {moderateScale} from "react-native-size-matters";
 
 const PickerLabel = ({ label, onLayout, labelStyle, transformY = 0, indentWidth = 0 }) => {
 
@@ -17,11 +18,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 99999,
     width: '100%',
+    paddingTop: moderateScale(1)
   },
   label: {
-    paddingLeft: 10,
+    paddingLeft: moderateScale(10),
     color: '#000',
-    fontSize: 13,
+    fontSize: moderateScale(12),
     textAlign: 'left'
   },
 });

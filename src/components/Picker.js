@@ -25,6 +25,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {moderateScale} from "react-native-size-matters";
 
 import {
   ASCII_CODE,
@@ -111,7 +112,7 @@ function Picker({
   labelY = 0,
   language = LANGUAGE.DEFAULT,
   leftComponent = undefined,
-  leftComponentIndentLabel = false,
+  leftComponentIndentLabel = true,
   listChildContainerStyle = {},
   listChildLabelStyle = {},
   ListEmptyComponent = null,
@@ -1810,7 +1811,7 @@ function Picker({
             <View style={{ flexDirection: 'column', width: '80%' }}>
               {listMode === LIST_MODE.MODAL && (
                 <View
-                  style={{ paddingTop: 10, paddingBottom: searchable ? 20 : 0, ...modalTitleContainerStyle }}>
+                  style={{ paddingTop: moderateScale(5), paddingBottom: searchable ? moderateScale(15) : 0, ...modalTitleContainerStyle }}>
                   <Text style={_modalTitleStyle}>{modalTitle}</Text>
                 </View>
               )}
@@ -2054,22 +2055,26 @@ function Picker({
    * @returns {string}
    */
   const pointerEvents = useMemo(() => (disabled ? 'none' : 'auto'), [disabled]);
+  const [dimlabel, setDimLabel] = useState(false)
 
   const { backgroundColor: _bgC, ...touchOpacityStyle } = THEME.style;
-  const _innerStyle = [touchOpacityStyle, _style, label ? {paddingTop: 5} : {}];
+  const _innerStyle = [touchOpacityStyle, _style, label ? {paddingTop: moderateScale(5)} : {}];
+
 
   return (
     <View style={_containerStyle} {...containerProps}>
       {label && (
         <PickerLabel
           label={label}
-          labelStyle={labelStyle}
+          labelStyle={[labelStyle, dimlabel ? {opacity: 0.15} : {}]}
           indentWidth={labelIndentWidth}
           transformY={labelY}
         />
       )}
       <TouchableOpacity
         style={_innerStyle}
+        onPressIn={() => setDimLabel(true)}
+        onPressOut={() => setDimLabel(false)}
         onPress={__onPress}
         onLayout={__onLayout}
         {...props}

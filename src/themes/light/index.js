@@ -1,5 +1,4 @@
-import { StyleSheet } from 'react-native';
-
+import { ScaledSheet, moderateScale, verticalScale, scale } from 'react-native-size-matters';
 import Colors from '../../constants/colors';
 
 export const ICONS = {
@@ -9,38 +8,38 @@ export const ICONS = {
   CLOSE: require('./icons/close.png'),
 };
 
-export default StyleSheet.create({
+export default ScaledSheet.create({
   arrowIcon: {
-    height: 20,
-    width: 20,
+    height: moderateScale(20),
+    width: moderateScale(20),
   },
   arrowIconContainer: {
-    marginLeft: 10,
+    marginLeft: moderateScale(10),
   },
   badgeDotStyle: {
     backgroundColor: Colors.GREY,
-    borderRadius: 10 / 2,
-    height: 10,
-    marginRight: 8,
-    width: 10,
+    borderRadius: moderateScale(5),
+    height: moderateScale(10),
+    marginRight: moderateScale(8),
+    width: moderateScale(10),
   },
   badgeSeparator: {
-    width: 5,
+    width: moderateScale(5),
   },
   badgeStyle: {
     alignItems: 'center',
     backgroundColor: Colors.ALTO,
-    borderRadius: 10,
+    borderRadius: moderateScale(10),
     flexDirection: 'row',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: moderateScale(10),
+    paddingVertical: moderateScale(5),
   },
   closeIcon: {
-    height: 30,
-    width: 30,
+    height: moderateScale(30),
+    width: moderateScale(30),
   },
   closeIconContainer: {
-    marginLeft: 10,
+    marginLeft: moderateScale(10),
   },
   container: {
     width: '100%',
@@ -52,8 +51,8 @@ export default StyleSheet.create({
   dropDownContainer: {
     backgroundColor: Colors.WHITE,
     borderColor: Colors.BLACK,
-    borderRadius: 8,
-    borderWidth: 1,
+    borderRadius: moderateScale(8),
+    borderWidth: scale(1),
     overflow: 'hidden',
     position: 'absolute',
     width: '100%',
@@ -65,22 +64,23 @@ export default StyleSheet.create({
     flex: 1,
   },
   extendableBadgeItemContainer: {
-    marginEnd: 7,
-    marginVertical: 3,
+    marginEnd: moderateScale(7),
+    marginVertical: moderateScale(3),
   },
   flatListContentContainer: {
     flexGrow: 1,
   },
   iconContainer: {
-    marginRight: 10,
+    marginRight: moderateScale(10),
   },
   itemSeparator: {
     backgroundColor: Colors.BLACK,
-    height: 1,
+    height: scale(1),
   },
   label: {
     color: Colors.BLACK,
     flex: 1,
+    fontSize: moderateScale(12),
   },
   labelContainer: {
     flex: 1,
@@ -94,25 +94,26 @@ export default StyleSheet.create({
     flexGrow: 1,
   },
   listChildContainer: {
-    paddingLeft: 40,
+    paddingLeft: moderateScale(40),
   },
   listChildLabel: {},
   listItemContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    height: 40,
+    height: moderateScale(40),
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    paddingHorizontal: moderateScale(10),
   },
   listItemLabel: {
     color: Colors.BLACK,
     flex: 1,
+    fontSize: moderateScale(12),
   },
   listMessageContainer: {
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    padding: 10,
+    padding: moderateScale(10),
   },
   listMessageText: {},
   listParentContainer: {},
@@ -122,25 +123,26 @@ export default StyleSheet.create({
   },
   modalTitle: {
     color: Colors.BLACK,
-    fontSize: 18,
+    fontSize: moderateScale(18),
   },
   searchContainer: {
     alignItems: 'center',
     borderBottomColor: Colors.BLACK,
-    borderBottomWidth: 1,
+    borderBottomWidth: scale(1),
     flexDirection: 'row',
-    padding: 10,
+    padding: moderateScale(10),
   },
   searchTextInput: {
     borderColor: Colors.BLACK,
-    borderRadius: 8,
-    borderWidth: 1,
+    borderRadius: moderateScale(8),
+    borderWidth: scale(1),
     color: Colors.BLACK,
     flexGrow: 1,
     flexShrink: 1,
     margin: 0,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: moderateScale(10),
+    paddingVertical: moderateScale(5),
+    fontSize: moderateScale(14)
   },
   selectedItemContainer: {},
   selectedItemLabel: {},
@@ -148,20 +150,20 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.WHITE,
     borderColor: Colors.BLACK,
-    borderRadius: 8,
+    borderRadius: moderateScale(8),
     borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    minHeight: 50,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
+    minHeight: moderateScale(46),
+    paddingHorizontal: moderateScale(10),
+    paddingVertical: moderateScale(3),
     width: '100%',
   },
   tickIcon: {
-    height: 20,
-    width: 20,
+    height: moderateScale(20),
+    width: moderateScale(20),
   },
   tickIconContainer: {
-    marginLeft: 10,
+    marginLeft: moderateScale(10),
   },
 });
