@@ -25,7 +25,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {responsiveHeight} from "react-native-responsive-dimensions";
 
 import {
   ASCII_CODE,
@@ -48,7 +47,6 @@ import THEMES from '../themes';
 import ListEmpty from './ListEmpty';
 import RenderBadgeItem from './RenderBadgeItem';
 import RenderListItem from './RenderListItem';
-import { Outline } from './Outline';
 import PickerLabel from './PickerLabel';
 
 const { height: WINDOW_HEIGHT } = Dimensions.get('window');
@@ -1812,7 +1810,7 @@ function Picker({
             <View style={{ flexDirection: 'column', width: '80%' }}>
               {listMode === LIST_MODE.MODAL && (
                 <View
-                  style={{ paddingBottom: searchable ? '5%' : 0, ...modalTitleContainerStyle }}>
+                  style={{ paddingTop: 10, paddingBottom: searchable ? 20 : 0, ...modalTitleContainerStyle }}>
                   <Text style={_modalTitleStyle}>{modalTitle}</Text>
                 </View>
               )}
@@ -2057,32 +2055,17 @@ function Picker({
    */
   const pointerEvents = useMemo(() => (disabled ? 'none' : 'auto'), [disabled]);
 
-  // Outline & Label
-  const { colors, roundness } = Theme;
   const { backgroundColor: _bgC, ...touchOpacityStyle } = THEME.style;
-  const _innerStyle = [touchOpacityStyle, _style[1], _style[2], label ? {paddingTop: responsiveHeight(1)} : {}];
+  const _innerStyle = [touchOpacityStyle, _style, label ? {paddingTop: 5} : {}];
 
   return (
     <View style={_containerStyle} {...containerProps}>
-      <Outline
-        style={_style}
-        roundness={_dropDownContainerStyle.flat()[0].borderRadius || roundness}
-        hasActiveOutline={hasError}
-        activeColor={hasError ? Theme?.colors.error : Theme?.colors.primary}
-        outlineColor={customOutlineColor || 'black'}
-        backgroundColor={
-          style.backgroundColor
-            ? style.backgroundColor
-            : colors.backgroundColor || 'white'
-        }
-      />
       {label && (
         <PickerLabel
           label={label}
           labelStyle={labelStyle}
           indentWidth={labelIndentWidth}
           transformY={labelY}
-          blurBackground={labelBlurBackground}
         />
       )}
       <TouchableOpacity
