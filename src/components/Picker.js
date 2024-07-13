@@ -94,9 +94,9 @@ function Picker({
   disableLocalSearch = false,
   dropDownContainerStyle = {},
   dropDownDirection = DROPDOWN_DIRECTION.DEFAULT,
-  hasError = false,
   extendableBadgeContainer = false,
   flatListProps = {},
+  hidden = false,
   hideSelectedItemIcon = false,
   hideListItemsIcons = false,
   iconContainerStyle = {},
@@ -106,7 +106,6 @@ function Picker({
   itemSeparator = false,
   itemSeparatorStyle = {},
   label = '',
-  labelBlurBackground = false,
   labelProps = {},
   labelStyle = {},
   labelY = 0,
@@ -2071,20 +2070,20 @@ function Picker({
           transformY={labelY}
         />
       )}
-      <TouchableOpacity
-        style={_innerStyle}
-        onPressIn={() => setDimLabel(true)}
-        onPressOut={() => setDimLabel(false)}
-        onPress={__onPress}
-        onLayout={__onLayout}
-        {...props}
-        ref={onRef}
-        pointerEvents={pointerEvents}
-        disabled={disabled}
-        testID={testID}>
+      {!hidden && <TouchableOpacity
+          style={_innerStyle}
+          onPressIn={() => setDimLabel(true)}
+          onPressOut={() => setDimLabel(false)}
+          onPress={__onPress}
+          onLayout={__onLayout}
+          {...props}
+          ref={onRef}
+          pointerEvents={pointerEvents}
+          disabled={disabled}
+          testID={testID}>
         {_BodyComponent}
         {_ArrowComponent}
-      </TouchableOpacity>
+      </TouchableOpacity>}
       {DropDownBodyComponent}
     </View>
   );
