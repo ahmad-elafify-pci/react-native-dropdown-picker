@@ -94,6 +94,9 @@ function Picker({
   disableLocalSearch = false,
   dropDownContainerStyle = {},
   dropDownDirection = DROPDOWN_DIRECTION.DEFAULT,
+  dropDownLabelContainerStyle = {},
+  dropDownLabelTextStyle = {},
+  dropDownLabelY = 0,
   extendableBadgeContainer = false,
   flatListProps = {},
   hidden = false,
@@ -107,8 +110,6 @@ function Picker({
   itemSeparatorStyle = {},
   label = '',
   labelProps = {},
-  labelStyle = {},
-  labelY = 0,
   language = LANGUAGE.DEFAULT,
   leftComponent = undefined,
   leftComponentIndentLabel = true,
@@ -168,14 +169,12 @@ function Picker({
   testID,
   textStyle = {},
   theme = THEMES.DEFAULT,
-  Theme = {},
   TickIconComponent = null,
   tickIconContainerStyle = {},
   tickIconStyle = {},
   translation = {},
   zIndex = 5000,
   zIndexInverse = 6000,
-  customOutlineColor = undefined,
 }) {
   const [necessaryItems, setNecessaryItems] = useState([]);
   const [searchText, setSearchText] = useState('');
@@ -2068,7 +2067,7 @@ function Picker({
   const [dimlabel, setDimLabel] = useState(false)
 
   const { backgroundColor: _bgC, ...touchOpacityStyle } = THEME.style;
-  const _innerStyle = [touchOpacityStyle, _style, label ? {paddingTop: moderateScale(5)} : {}];
+  const _innerStyle = [touchOpacityStyle, label ? {paddingTop: moderateScale(7.5), _style} : {}];
 
 
   return (
@@ -2076,9 +2075,10 @@ function Picker({
       {!loading && label && (
         <PickerLabel
           label={label}
-          labelStyle={[labelStyle, dimlabel ? {opacity: 0.15} : {}]}
+          labelContainerStyle={dropDownLabelContainerStyle}
+          labelTextStyle={[dropDownLabelTextStyle, dimlabel ? {opacity: 0.15} : {}]}
           indentWidth={labelIndentWidth}
-          transformY={labelY}
+          transformY={dropDownLabelY}
         />
       )}
       {!hidden && <TouchableOpacity

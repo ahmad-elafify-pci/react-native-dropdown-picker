@@ -2,11 +2,11 @@ import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import {moderateScale} from "react-native-size-matters";
 
-const PickerLabel = ({ label, onLayout, labelStyle, transformY = 0, indentWidth = 0 }) => {
+const PickerLabel = ({ label, onLayout, labelTextStyle, labelContainerStyle, transformY = 0, indentWidth = 0 }) => {
 
   return (
-      <View style={[styles.container, { transform: [{ translateY: transformY * -1 }, { translateX: indentWidth }] }]} onLayout={onLayout}>
-        <Text style={[styles.label, labelStyle]}>
+      <View style={[styles.container, { transform: [{ translateY: transformY * -1 }, { translateX: indentWidth }] }, labelContainerStyle]} onLayout={onLayout}>
+        <Text style={[styles.label, labelTextStyle]}>
           {label}
         </Text>
       </View>
