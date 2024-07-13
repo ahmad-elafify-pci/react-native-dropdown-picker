@@ -2067,7 +2067,7 @@ function Picker({
   const [dimlabel, setDimLabel] = useState(false)
 
   const { backgroundColor: _bgC, ...touchOpacityStyle } = THEME.style;
-  const _innerStyle = [touchOpacityStyle, label ? {paddingTop: moderateScale(7.5), _style} : {}];
+  const _innerStyle = [touchOpacityStyle, label ? {paddingTop: moderateScale(7.5)} : {}, _style];
 
 
   return (
