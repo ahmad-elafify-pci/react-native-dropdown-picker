@@ -1295,11 +1295,22 @@ function Picker({
     setBadgeFlatListRef,
     THEME.listBody,
   ]);
+  const LoadingBodyComponent = (
+      <View style={{ flexDirection: 'row' }}>
+        <View style={{paddingLeft: moderateScale(10), paddingRight: moderateScale(17.5)}}>
+          <ActivityIndicator size={moderateScale(10)} color="#0000ff" />
+        </View>
+        <Text style={[_displayValueStyle, {flex: 0}]} {...labelProps}>Loading</Text>
+      </View>
+  )
 
   /**
    * The body component.
    */
   const _BodyComponent = useMemo(() => {
+    if (loading) {
+      return LoadingBodyComponent
+    }
     switch (_mode) {
       case MODE.SIMPLE:
         return SimpleBodyComponent;
@@ -2062,7 +2073,7 @@ function Picker({
 
   return (
     <View style={_containerStyle} {...containerProps}>
-      {label && (
+      {!loading && label && (
         <PickerLabel
           label={label}
           labelStyle={[labelStyle, dimlabel ? {opacity: 0.15} : {}]}
