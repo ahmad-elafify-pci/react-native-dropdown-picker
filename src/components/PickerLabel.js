@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   label: {
     paddingLeft: moderateScale(10),
     color: '#000',
-    fontSize: moderateScale(12),
+    fontSize: moderateScale(11),
     textAlign: 'left'
   },
 });

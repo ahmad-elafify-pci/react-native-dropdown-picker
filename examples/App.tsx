@@ -142,7 +142,7 @@ export default class App extends React.Component<Props, State> {
             <Picker
               testID={'hello'}
               modalTitle={'test'}
-              label={'Test'}
+              label={'This Is A Testing Label'}
               listMode={'MODAL'}
               searchable={true}
               setValue={this.setCurrentExample}
