@@ -1,15 +1,30 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
-import {moderateScale} from "react-native-size-matters";
+import { moderateScale } from 'react-native-size-matters';
 
-const PickerLabel = ({ label, onLayout, labelTextStyle, labelContainerStyle, transformY = 0, indentWidth = 0 }) => {
-
+const PickerLabel = ({
+  label,
+  onLayout,
+  labelTextStyle,
+  labelContainerStyle,
+  transformY = 0,
+  indentWidth = 0,
+}) => {
   return (
-      <View style={[styles.container, { transform: [{ translateY: transformY * -1 }, { translateX: indentWidth }] }, labelContainerStyle]} onLayout={onLayout}>
-        <Text style={[styles.label, labelTextStyle]}>
-          {label}
-        </Text>
-      </View>
+    <View
+      style={[
+        styles.container,
+        {
+          transform: [
+            { translateY: transformY * -1 },
+            { translateX: indentWidth },
+          ],
+        },
+        labelContainerStyle,
+      ]}
+      onLayout={onLayout}>
+      <Text style={[styles.label, labelTextStyle]}>{label}</Text>
+    </View>
   );
 };
 
@@ -18,13 +33,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 99999,
     width: '100%',
-    paddingTop: moderateScale(1)
+    paddingTop: moderateScale(1),
   },
   label: {
     paddingLeft: moderateScale(10),
     color: '#000',
     fontSize: moderateScale(11),
-    textAlign: 'left'
+    textAlign: 'left',
   },
 });
 

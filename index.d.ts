@@ -191,6 +191,7 @@ declare module 'react-native-dropdown-picker-plus' {
     }) => JSX.Element;
     closeIconContainerStyle?: StyleProp<ViewStyle>;
     closeIconStyle?: StyleProp<ViewStyle>;
+    closeIconTestID?: string;
     closeOnBackPressed?: boolean;
     containerProps?: ViewProps;
     containerStyle?: StyleProp<ViewStyle>;

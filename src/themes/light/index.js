@@ -1,4 +1,9 @@
-import { ScaledSheet, moderateScale, verticalScale, scale } from 'react-native-size-matters';
+import {
+  ScaledSheet,
+  moderateScale,
+  verticalScale,
+  scale,
+} from 'react-native-size-matters';
 import Colors from '../../constants/colors';
 
 export const ICONS = {
@@ -142,7 +147,7 @@ export default ScaledSheet.create({
     margin: 0,
     paddingHorizontal: moderateScale(10),
     paddingVertical: moderateScale(5),
-    fontSize: moderateScale(14)
+    fontSize: moderateScale(14),
   },
   selectedItemContainer: {},
   selectedItemLabel: {},

@@ -1,7 +1,7 @@
 import React, { JSX } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ItemType } from 'react-native-dropdown-picker';
-import {moderateScale} from "react-native-size-matters";
+import { moderateScale } from 'react-native-size-matters';
 import JavascriptClassExample from './example-src-files/javascript-class-example';
 import JavascriptFunctionExample from './example-src-files/javascript-function-example';
 import TypescriptClassExample from './example-src-files/typescript-class-example';
@@ -141,6 +141,7 @@ export default class App extends React.Component<Props, State> {
           <View style={{ flex: 1 }}>
             <Picker
               testID={'hello'}
+              closeIconTestID={'closeHello'}
               modalTitle={'test'}
               label={'This Is A Testing Label'}
               listMode={'MODAL'}
@@ -152,7 +153,17 @@ export default class App extends React.Component<Props, State> {
               setOpen={this.setOpen as any}
               mode={'SIMPLE'}
               hideListItemsIcons={true}
-              leftComponent={<View style={{height: moderateScale(24), width: moderateScale(24), backgroundColor: 'red'}} /> as any}
+              leftComponent={
+                (
+                  <View
+                    style={{
+                      height: moderateScale(24),
+                      width: moderateScale(24),
+                      backgroundColor: 'red',
+                    }}
+                  />
+                ) as any
+              }
             />
           </View>
         </View>

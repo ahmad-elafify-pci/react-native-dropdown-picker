@@ -25,7 +25,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {moderateScale} from "react-native-size-matters";
+import { moderateScale } from 'react-native-size-matters';
 
 import {
   ASCII_CODE,
@@ -82,6 +82,7 @@ function Picker({
   closeIconContainerStyle = {},
   closeIconStyle = {},
   closeOnBackPressed = false,
+  closeIconTestID,
   containerProps = {},
   containerStyle = {},
   customItemContainerStyle = {},
@@ -705,7 +706,7 @@ function Picker({
     [getLabel, _placeholder],
   );
 
-  const [labelIndentWidth, setLabelIndentWidth] = useState(0)
+  const [labelIndentWidth, setLabelIndentWidth] = useState(0);
 
   /**
    * The icon of the selected item.
@@ -1006,10 +1007,11 @@ function Picker({
   const SimpleBodyComponent = useMemo(
     () => (
       <>
-        <View onLayout={(event) => {
-          const { width } = event.nativeEvent.layout;
-          if (leftComponentIndentLabel) setLabelIndentWidth(width)
-        }}>
+        <View
+          onLayout={(event) => {
+            const { width } = event.nativeEvent.layout;
+            if (leftComponentIndentLabel) setLabelIndentWidth(width);
+          }}>
           {leftComponent || SelectedItemIconComponent}
         </View>
         <Text style={_displayValueStyle} {...labelProps}>
@@ -1295,20 +1297,26 @@ function Picker({
     THEME.listBody,
   ]);
   const LoadingBodyComponent = (
-      <View style={{ flexDirection: 'row' }}>
-        <View style={{paddingLeft: moderateScale(10), paddingRight: moderateScale(17.5)}}>
-          <ActivityIndicator size={moderateScale(10)} color="#0000ff" />
-        </View>
-        <Text style={[_displayValueStyle, {flex: 0}]} {...labelProps}>Loading</Text>
+    <View style={{ flexDirection: 'row' }}>
+      <View
+        style={{
+          paddingLeft: moderateScale(10),
+          paddingRight: moderateScale(17.5),
+        }}>
+        <ActivityIndicator size={moderateScale(10)} color='#0000ff' />
       </View>
-  )
+      <Text style={[_displayValueStyle, { flex: 0 }]} {...labelProps}>
+        Loading
+      </Text>
+    </View>
+  );
 
   /**
    * The body component.
    */
   const _BodyComponent = useMemo(() => {
     if (loading) {
-      return LoadingBodyComponent
+      return LoadingBodyComponent;
     }
     switch (_mode) {
       case MODE.SIMPLE:
@@ -1629,8 +1637,9 @@ function Picker({
    */
   const __renderListItem = useCallback(
     ({ item }) => {
-
-      let IconComponent = hideListItemsIcons ? null : item[ITEM_SCHEMA.icon] ?? null;
+      let IconComponent = hideListItemsIcons
+        ? null
+        : (item[ITEM_SCHEMA.icon] ?? null);
 
       if (IconComponent) {
         IconComponent = (
@@ -1767,7 +1776,10 @@ function Picker({
     else Component = <Image source={ICON.CLOSE} style={_closeIconStyle} />;
 
     return (
-      <TouchableOpacity style={_closeIconContainerStyle} onPress={onPressClose}>
+      <TouchableOpacity
+        testID={closeIconTestID}
+        style={_closeIconContainerStyle}
+        onPress={onPressClose}>
         {Component}
       </TouchableOpacity>
     );
@@ -1778,6 +1790,7 @@ function Picker({
     _closeIconContainerStyle,
     onPressClose,
     ICON.CLOSE,
+    closeIconTestID,
   ]);
 
   /**
@@ -1820,7 +1833,11 @@ function Picker({
             <View style={{ flexDirection: 'column', width: '80%' }}>
               {listMode === LIST_MODE.MODAL && (
                 <View
-                  style={{ paddingTop: moderateScale(5), paddingBottom: searchable ? moderateScale(15) : 0, ...modalTitleContainerStyle }}>
+                  style={{
+                    paddingTop: moderateScale(5),
+                    paddingBottom: searchable ? moderateScale(15) : 0,
+                    ...modalTitleContainerStyle,
+                  }}>
                   <Text style={_modalTitleStyle}>{modalTitle}</Text>
                 </View>
               )}
@@ -2064,11 +2081,14 @@ function Picker({
    * @returns {string}
    */
   const pointerEvents = useMemo(() => (disabled ? 'none' : 'auto'), [disabled]);
-  const [dimlabel, setDimLabel] = useState(false)
+  const [dimlabel, setDimLabel] = useState(false);
 
   const { backgroundColor: _bgC, ...touchOpacityStyle } = THEME.style;
-  const _innerStyle = [touchOpacityStyle, label ? {paddingTop: moderateScale(7.5)} : {}, _style];
-
+  const _innerStyle = [
+    touchOpacityStyle,
+    label ? { paddingTop: moderateScale(7.5) } : {},
+    _style,
+  ];
 
   return (
     <View style={_containerStyle} {...containerProps}>
@@ -2076,12 +2096,16 @@ function Picker({
         <PickerLabel
           label={label}
           labelContainerStyle={dropDownLabelContainerStyle}
-          labelTextStyle={[dropDownLabelTextStyle, dimlabel ? {opacity: 0.15} : {}]}
+          labelTextStyle={[
+            dropDownLabelTextStyle,
+            dimlabel ? { opacity: 0.15 } : {},
+          ]}
           indentWidth={labelIndentWidth}
           transformY={dropDownLabelY}
         />
       )}
-      {!hidden && <TouchableOpacity
+      {!hidden && (
+        <TouchableOpacity
           style={_innerStyle}
           onPressIn={() => setDimLabel(true)}
           onPressOut={() => setDimLabel(false)}
@@ -2092,9 +2116,10 @@ function Picker({
           pointerEvents={pointerEvents}
           disabled={disabled}
           testID={testID}>
-        {_BodyComponent}
-        {_ArrowComponent}
-      </TouchableOpacity>}
+          {_BodyComponent}
+          {_ArrowComponent}
+        </TouchableOpacity>
+      )}
       {DropDownBodyComponent}
     </View>
   );
