@@ -1956,6 +1956,7 @@ function Picker({
         data={_items}
         renderItem={__renderListItem}
         keyExtractor={keyExtractor}
+        keyboardShouldPersistTaps={'handled'}
         extraData={_value}
         ItemSeparatorComponent={ItemSeparatorComponent}
         stickyHeaderIndices={stickyHeaderIndices}
