@@ -50,6 +50,8 @@ import RenderBadgeItem from './RenderBadgeItem';
 import RenderListItem from './RenderListItem';
 import PickerLabel from './PickerLabel';
 
+const { distance, closest } = require('fastest-levenshtein');
+
 const { height: WINDOW_HEIGHT } = Dimensions.get('window');
 
 function Picker({
@@ -507,25 +509,37 @@ function Picker({
     }
     if (disableLocalSearch) return sortedItems;
 
-    const values = [];
     const normalizeText = (text) =>
       text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-    const results = sortedItems.filter((item) => {
-      const label = String(item[ITEM_SCHEMA.label]).toLowerCase();
+    let results = sortedItems
+      .filter((item) => {
+        const label = String(item[ITEM_SCHEMA.label]).toLowerCase();
 
-      if (
-        label.includes(searchText.toLowerCase()) ||
-        (searchWithRegionalAccents &&
-          normalizeText(label).includes(searchText.toLowerCase()))
-      ) {
-        values.push(item[ITEM_SCHEMA.value]);
-        return true;
-      }
+        return normalizeText(label).includes(searchText.toLowerCase());
+      })
+      .sort((a, b) => {
+        const labelA = normalizeText(
+          String(a[ITEM_SCHEMA.label]).toLowerCase(),
+        );
+        const labelB = normalizeText(
+          String(b[ITEM_SCHEMA.label]).toLowerCase(),
+        );
 
-      return false;
-    });
+        // Calculate distances from searchText
+        const distA = distance(searchText.toLowerCase(), labelA);
+        const distB = distance(searchText.toLowerCase(), labelB);
 
+        // If distances are the same, compare by length
+        if (distA === distB) {
+          return labelA.length - labelB.length;
+        }
+
+        // Otherwise, sort by distance
+        return distA - distB;
+      });
+
+    const values = [];
     results.forEach((item, index) => {
       if (
         item[ITEM_SCHEMA.parent] === undefined ||
@@ -541,7 +555,6 @@ function Picker({
 
       results.splice(index, 0, parent);
     });
-
     if (
       (results.length === 0 ||
         results.findIndex(
