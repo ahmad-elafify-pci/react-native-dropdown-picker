@@ -158,9 +158,9 @@ declare module 'react-native-dropdown-picker-plus' {
 
   export interface DropDownPickerBaseProps<T extends ValueType> {
     items: Array<ItemType<T>>;
-    setItems?: Dispatch<SetStateAction<Array<ItemType<T>>>>;
+    setItems?: Dispatch<SetStateAction<Array<ItemType<T>>>> | ((items: Array<ItemType<T>>) => void);
     open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>;
+    setOpen: Dispatch<SetStateAction<boolean>> | ((open: boolean) => void);
     activityIndicatorColor?: string;
     ActivityIndicatorComponent?: (
       props: ActivityIndicatorComponentPropsInterface,
@@ -292,7 +292,7 @@ declare module 'react-native-dropdown-picker-plus' {
     onChangeValue?: (value: T | null) => void;
     onSelectItem?: (item: ItemType<T>) => void;
     value: T | null;
-    setValue: Dispatch<SetStateAction<T | null>>;
+    setValue: Dispatch<SetStateAction<T | null>> | ((items: T | null) => void);
   }
 
   interface DropDownPickerMultipleProps<T extends ValueType> {
@@ -300,7 +300,7 @@ declare module 'react-native-dropdown-picker-plus' {
     onChangeValue?: (value: Array<T> | null) => void;
     onSelectItem?: (items: Array<ItemType<T>>) => void;
     value: Array<T> | null;
-    setValue: Dispatch<SetStateAction<Array<T> | null>>;
+    setValue: Dispatch<SetStateAction<Array<T> | null>> | ((items: Array<T> | null) => void);
   }
 
   interface DropDownPickerInterface {
